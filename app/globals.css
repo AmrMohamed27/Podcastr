@@ -8,6 +8,10 @@
   box-sizing: border-box;
 }
 
+.filter-white {
+  filter: brightness(0) invert(1);
+}
+
 html {
   background-color: #101114;
 }
@@ -15,6 +19,9 @@ html {
 @layer utilities {
   .input-class {
     @apply text-16 placeholder:text-16 bg-black-1 rounded-[6px] placeholder:text-gray-1 border-none text-gray-1;
+  }
+  .white-gradient {
+    @apply bg-[linear-gradient(90deg,_rgba(255,_255,_255,_0.06)_0%,_rgba(255,_255,_255,_0)_100%)];
   }
   .podcast_grid {
     @apply grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4;
