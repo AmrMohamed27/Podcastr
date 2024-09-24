@@ -59,6 +59,7 @@ export const podcastData = [
     description: "A long form, in-depth conversation",
     imgURL:
       "https://lovely-flamingo-139.convex.cloud/api/storage/3106b884-548d-4ba0-a179-785901f69806",
+    host: "Joe Rogan",
   },
   {
     id: 2,
@@ -66,6 +67,7 @@ export const podcastData = [
     description: "This is how the news should sound",
     imgURL:
       "https://lovely-flamingo-139.convex.cloud/api/storage/16fbf9bd-d800-42bc-ac95-d5a586447bf6",
+    host: "Chris Do",
   },
   {
     id: 3,
@@ -73,13 +75,15 @@ export const podcastData = [
     description: "Join Michelle Obama in conversation",
     imgURL:
       "https://lovely-flamingo-139.convex.cloud/api/storage/60f0c1d9-f2ac-4a96-9178-f01d78fa3733",
+    host: "Marques Brownlee",
   },
   {
     id: 4,
-    title: "The Tech Talks Daily Podcast",
+    title: "The Tech Talks Daily",
     description: "This is how the news should sound",
     imgURL:
       "https://lovely-flamingo-139.convex.cloud/api/storage/5ba7ed1b-88b4-4c32-8d71-270f1c502445",
+    host: "Neil C. Hughes",
   },
   {
     id: 5,
@@ -87,6 +91,7 @@ export const podcastData = [
     description: "A long form, in-depth conversation",
     imgURL:
       "https://lovely-flamingo-139.convex.cloud/api/storage/ca7cb1a6-4919-4b2c-a73e-279a79ac6d23",
+    host: "Gary Vaynerchuk",
   },
   {
     id: 6,
@@ -94,6 +99,7 @@ export const podcastData = [
     description: "Join Michelle Obama in conversation",
     imgURL:
       "https://lovely-flamingo-139.convex.cloud/api/storage/b8ea40c7-aafb-401a-9129-73c515a73ab5",
+    host: "Wes Bos & Scott Tolinski",
   },
   {
     id: 7,
@@ -101,6 +107,7 @@ export const podcastData = [
     description: "A long form, in-depth conversation",
     imgURL:
       "https://lovely-flamingo-139.convex.cloud/api/storage/8a55d662-fe3f-4bcf-b78b-3b2f3d3def5c",
+    host: "Logan Paul",
   },
   {
     id: 8,
@@ -108,5 +115,31 @@ export const podcastData = [
     description: "This is how the news should sound",
     imgURL:
       "https://lovely-flamingo-139.convex.cloud/api/storage/221ee4bd-435f-42c3-8e98-4a001e0d806e",
+    host: "Sherrell Dorsey",
+  },
+];
+
+type Podcaster = {
+  id: number;
+  name: string;
+  username: string;
+  numberOfPodcasts: number;
+  image: string;
+};
+
+export const topPodcasters: Podcaster[] = [
+  {
+    id: 1,
+    name: "Roman Picisan",
+    username: "@picisan",
+    numberOfPodcasts: 34,
+    image: "https://via.placeholder.com/150",
+  },
+  {
+    id: 2,
+    name: "James Aderson",
+    username: "@james",
+    numberOfPodcasts: 21,
+    image: "https://via.placeholder.com/150",
   },
 ];
