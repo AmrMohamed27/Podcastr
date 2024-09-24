@@ -135,3 +135,11 @@
 //   scrollSnaps: number[];
 //   onDotButtonClick: (index: number) => void;
 // };
+
+// Type of sidebar links
+export type sidebarLink = {
+  id: number;
+  imgURL: string;
+  route: string;
+  label: string;
+};

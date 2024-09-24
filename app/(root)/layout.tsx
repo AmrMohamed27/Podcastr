@@ -1,4 +1,5 @@
 import LeftSidebar from "@/components/LeftSidebar";
+import MobileNav from "@/components/MobileNav";
 import RightSidebar from "@/components/RightSidebar";
 import type { Metadata } from "next";
 
@@ -15,7 +16,8 @@ export default function RootLayout({
   return (
     <div>
       <main>
-        <LeftSidebar />
+        <MobileNav />
+        <LeftSidebar className={"hidden md:flex"} isOpen={true} />
         {children}
         <RightSidebar />
       </main>
