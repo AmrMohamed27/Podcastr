@@ -5,7 +5,7 @@ import menu from "/public/assets/icons/left-sidebar/hamburger.svg";
 import { useState } from "react";
 import { X } from "lucide-react";
 import LeftSidebar from "./LeftSidebar";
-import SiteLogo from "./SiteLogo";
+import SiteLogo from "../common/SiteLogo";
 
 const MobileNav = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -37,7 +37,7 @@ const MobileNav = () => {
           onClick={handleClick}
         />
       )}
-      <LeftSidebar className="flex" isOpen={isOpen} />
+      <LeftSidebar className="flex absolute top-0 left-0" isOpen={isOpen} />
     </header>
   );
 };

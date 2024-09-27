@@ -1,6 +1,6 @@
-import LeftSidebar from "@/components/LeftSidebar";
-import MobileNav from "@/components/MobileNav";
-import RightSidebar from "@/components/RightSidebar";
+import LeftSidebar from "@/components/nav/LeftSidebar";
+import MobileNav from "@/components/nav/MobileNav";
+import RightSidebar from "@/components/nav/RightSidebar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <div>
-      <main>
+      <main className="flex flex-row min-h-screen max-md:py-12">
         <MobileNav />
         <LeftSidebar className={"hidden md:flex"} isOpen={true} />
         {children}

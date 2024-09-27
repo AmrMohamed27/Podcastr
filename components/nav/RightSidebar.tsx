@@ -9,7 +9,7 @@ import Image from "next/image";
 const RightSidebar = () => {
   return (
     <section
-      className={`bg-black-1 text-white-1 min-h-screen absolute top-0 right-0 flex-col gap-8 w-[349px] py-8 px-8 z-50 hidden xl:flex`}
+      className={`bg-black-1 text-white-1 min-h-screen flex-col gap-8 w-[349px] py-8 px-8 z-50 hidden xl:flex`}
     >
       <div className="flex flex-row justify-between items-center">
         {/* Profile */}

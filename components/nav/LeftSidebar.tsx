@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { sidebarLink } from "@/types";
-import SiteLogo from "./SiteLogo";
+import SiteLogo from "../common/SiteLogo";
 
 const LeftSidebar = ({
   className,
@@ -35,7 +35,7 @@ const LeftSidebar = ({
   return (
     // Container
     <section
-      className={`${className} bg-black-1 text-white-1 min-h-screen absolute top-0 left-0 flex-col gap-12 w-[270px] pt-8 z-50 ${
+      className={`${className} bg-black-1 text-white-1 min-h-screen flex-col gap-12 w-[270px] pt-8 z-50 ${
         isOpen ? "translate-x-0" : "-translate-x-[105%]"
       } transform transition-transform duration-300 ease-in`}
     >
