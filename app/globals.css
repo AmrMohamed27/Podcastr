@@ -8,6 +8,10 @@
   box-sizing: border-box;
 }
 
+:focus-visible {
+  outline: none;
+}
+
 .filter-white {
   filter: brightness(0) invert(1);
 }
