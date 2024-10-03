@@ -26,6 +26,7 @@ const config = {
           "3": "rgba(255, 255, 255, 0.4)",
           "4": "rgba(255, 255, 255, 0.64)",
           "5": "rgba(255, 255, 255, 0.80)",
+          "6": "#ECF0FF",
         },
         black: {
           "1": "#15171C",
@@ -35,12 +36,14 @@ const config = {
           "5": "#2E3036",
           "6": "#24272C",
           "7": "rgba(18, 18, 18, 0.84)",
+          input: "#1B1F29",
         },
         orange: {
           "1": "#F97535",
         },
         gray: {
           "1": "#71788B",
+          "2": "#C5D0E6",
         },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

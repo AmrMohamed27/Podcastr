@@ -23,7 +23,7 @@ export default defineSchema({
       minute: v.number(),
       second: v.number(),
     }),
-    plays: v.optional(v.number()),
+    plays: v.number(),
     author: v.string(),
     authorId: v.string(),
     authorImageUrl: v.string(),

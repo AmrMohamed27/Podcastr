@@ -1,14 +1,22 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Podcastr",
-  description: "AI-powered podcast platform",
-};
+import Image from "next/image";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main>{children}</main>;
+  return (
+    <main className="relative h-screen w-full">
+      <div className="absolute size-full">
+        <Image
+          src="/assets/images/bg-img.png"
+          alt="background"
+          fill
+          className="size-full"
+        />
+      </div>
+
+      {children}
+    </main>
+  );
 }

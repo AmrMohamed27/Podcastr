@@ -169,3 +169,10 @@ export const topPodcasters: Podcaster[] = [
     image: "https://via.placeholder.com/150",
   },
 ];
+
+export const signInFooterLinks: { id: number; label: string; link: string }[] =
+  [
+    { id: 1, label: "Help", link: "/help" },
+    { id: 2, label: "Privacy", link: "/privacy" },
+    { id: 3, label: "Terms", link: "/terms" },
+  ];

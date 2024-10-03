@@ -7,7 +7,7 @@ const SiteLogo = () => {
       <div>
         <Image src={logo} alt="logo" />
       </div>
-      <span className="text-2xl font-bold">Podcastr</span>
+      <span className="text-2xl font-bold text-white-1">Podcastr</span>
     </Link>
   );
 };
