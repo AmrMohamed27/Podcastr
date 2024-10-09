@@ -24,6 +24,7 @@ export default defineSchema({
       second: v.number(),
     }),
     plays: v.number(),
+    category: v.string(),
     author: v.string(),
     authorId: v.string(),
     authorImageUrl: v.string(),

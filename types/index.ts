@@ -1,8 +1,11 @@
 // /* eslint-disable no-unused-vars */
 
-// import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
-// import { Id } from "@/convex/_generated/dataModel";
+import { Id } from "@/convex/_generated/dataModel";
+import { ControllerRenderProps } from "react-hook-form";
+import { z } from "zod";
+import createSchema from "@/schemas/createSchema";
 
 // export interface EmptyStateProps {
 //   title: string;
@@ -50,14 +53,6 @@
 //   listeners: number;
 // }
 
-// export type VoiceType =
-//   | "alloy"
-//   | "echo"
-//   | "fable"
-//   | "onyx"
-//   | "nova"
-//   | "shimmer";
-
 // export interface GeneratePodcastProps {
 //   voiceType: VoiceType;
 //   setAudio: Dispatch<SetStateAction<string>>;
@@ -68,13 +63,13 @@
 //   setAudioDuration: Dispatch<SetStateAction<number>>;
 // }
 
-// export interface GenerateThumbnailProps {
-//   setImage: Dispatch<SetStateAction<string>>;
-//   setImageStorageId: Dispatch<SetStateAction<Id<"_storage"> | null>>;
-//   image: string;
-//   imagePrompt: string;
-//   setImagePrompt: Dispatch<SetStateAction<string>>;
-// }
+export interface GenerateThumbnailProps {
+  setImage: Dispatch<SetStateAction<string>>;
+  setImageStorageId: Dispatch<SetStateAction<Id<"_storage"> | null>>;
+  image: string;
+  imagePrompt: string;
+  setImagePrompt: Dispatch<SetStateAction<string>>;
+}
 
 // export interface LatestPodcastCardProps {
 //   imgUrl: string;
@@ -137,9 +132,49 @@
 // };
 
 // Type of sidebar links
-export type sidebarLink = {
+export type SidebarLink = {
   id: number;
   imgURL: string;
   route: string;
   label: string;
 };
+
+// Voice Types
+
+export type VoiceType =
+  | "alloy"
+  | "echo"
+  | "fable"
+  | "onyx"
+  | "nova"
+  | "shimmer";
+
+// Generate Podcast props
+export interface GeneratePodcastProps {
+  field: ControllerRenderProps<z.infer<typeof createSchema>, "audioPrompt">;
+  setAudioStorageId: Dispatch<SetStateAction<Id<"_storage"> | null>>;
+  setAudio: Dispatch<SetStateAction<string>>;
+  setAudioDuration: Dispatch<
+    SetStateAction<{
+      hours: number;
+      minutes: number;
+      seconds: number;
+    }>
+  >;
+  voiceType: string | null;
+  audio: string;
+  voicePrompt: string;
+  setVoicePrompt: Dispatch<SetStateAction<string>>;
+}
+
+export interface SelectCategoryProps {
+  field: ControllerRenderProps<
+    z.infer<typeof createSchema>,
+    "categories" | "voiceType"
+  >;
+  passedEnum: z.ZodEnum<[string, ...string[]]>;
+  placeholder: string;
+  value: string | null;
+  setValue: Dispatch<SetStateAction<string | null>>;
+  hasAudio?: boolean | null;
+}

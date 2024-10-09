@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import createSchema from "@/schemas/createSchema";
-import { categoriesEnum } from "@/schemas/createSchema";
+import createSchema, {
+  categoriesEnum,
+  voiceTypeEnum,
+} from "@/schemas/createSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,15 +17,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
+import { Id } from "@/convex/_generated/dataModel";
+import { VoiceType } from "../../types/index";
+import SelectFromEnum from "./SelectFromEnum";
+import GeneratePodcast from "./GeneratePodcast";
+import GenerateThumbnail from "./GenerateThumbnail";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Label } from "../ui/label";
+
+// TODO: Last thing we did was to add the ability to select the AI voice.
 
 const CreatePodcastForm = () => {
   const form = useForm<z.infer<typeof createSchema>>({
@@ -37,25 +43,62 @@ const CreatePodcastForm = () => {
   function onSubmit(values: z.infer<typeof createSchema>) {
     console.log(values);
   }
-  const [searchText, setSearchText] = useState<string>("");
-  const [filteredCategories, setFilteredCategories] = useState(
-    categoriesEnum.options.filter((category) => category)
+
+  // State variables
+
+  // Title
+  // const [podcastTitle, setPodcastTitle] = useState<string>("");
+  // Categories
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  // Description
+  // const [podcastDescription, setPodcastDescription] = useState<string>("");
+  // Generate Audio
+  const [audioPrompt, setAudioPrompt] = useState<string>("");
+  const [audioUrl, setAudioUrl] = useState<string>("");
+  const [audioDuration, setAudioDuration] = useState<{
+    hours: number;
+    minutes: number;
+    seconds: number;
+  }>({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [audioStorageId, setAudioStorageId] = useState<Id<"_storage"> | null>(
+    null
   );
+  const [aiVoice, setAiVoice] = useState<string | null>(null);
+  const [audioChoice, setAudioChoice] = useState<string>("upload-audio");
+  const [uploadedAudio, setUploadedAudio] = useState<File | null>(null);
+  // Generate Thumbnail
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageStorageId, setImageStorageId] = useState<Id<"_storage"> | null>(
+    null
+  );
+  const [imagePrompt, setImagePrompt] = useState<string>("");
+  // Submit
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  useEffect(() => {
-    setFilteredCategories(
-      Array.from(categoriesEnum.options).filter((category) =>
-        category.toLowerCase().includes(searchText.toLowerCase())
-      )
-    );
-  }, [searchText]);
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
+  // Handle option change
+  const handleOptionChange = (value: string) => {
+    setAudioChoice(value);
   };
+
+  // Handler for the file input
+  const handleAudioUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setUploadedAudio(file);
+      // Optionally, you can handle file preview or processing here
+    }
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 min-h-screen"
+      >
         {/* Title */}
         <FormField
           control={form.control}
@@ -67,7 +110,7 @@ const CreatePodcastForm = () => {
                 <Input
                   placeholder="Provide a title for your podcast"
                   {...field}
-                  className="bg-black-1 border-none focus-visible:border-orange-1"
+                  className="bg-black-1 border-none"
                 />
               </FormControl>
               <FormMessage />
@@ -81,40 +124,15 @@ const CreatePodcastForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Categories</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-                value={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger className="bg-black-1 outline-none border-none placeholder:text-slate-400 z-50">
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent className="text-white-1 z-50 bg-black-1 placeholder:text-slate-400">
-                  {/* Search input field */}
-                  <div className="px-4 py-2">
-                    <Input
-                      placeholder="Search categories..."
-                      value={searchText}
-                      onChange={handleSearch} // Update search term
-                      className="bg-black-1 border-none focus-visible:border-orange-1 placeholder:text-slate-400"
-                    />
-                  </div>
-                  {/* Filtered category options */}
-                  {filteredCategories.length > 0 ? (
-                    filteredCategories.map((category) => (
-                      <SelectItem key={category} value={category} className="">
-                        {category}
-                      </SelectItem>
-                    ))
-                  ) : (
-                    <p className="px-4 py-2 text-slate-400">
-                      No categories found.
-                    </p>
-                  )}
-                </SelectContent>
-              </Select>
+              <FormControl>
+                <SelectFromEnum
+                  field={field}
+                  passedEnum={categoriesEnum}
+                  placeholder={"Select category"}
+                  value={selectedCategory}
+                  setValue={setSelectedCategory}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -130,31 +148,103 @@ const CreatePodcastForm = () => {
                 <Textarea
                   placeholder="Write a short description about the podcast"
                   {...field}
-                  className="bg-black-1 border-none focus-visible:border-orange-1 focus-visible:outline-none"
+                  className="bg-black-1 border-none focus-visible:outline-none"
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        {/* Audio Prompt */}
-        <FormField
-          control={form.control}
-          name="audioPrompt"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>AI Prompt to generate podcast</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Provide text to AI to generate audio"
-                  {...field}
-                  className="bg-black-1 border-none focus-visible:border-orange-1"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Separator */}
+        <div className="h-px w-full bg-black-5"></div>
+        <RadioGroup
+          defaultValue="upload-audio"
+          className="flex flex-row gap-16"
+          onValueChange={handleOptionChange}
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="upload-audio" id="upload-audio" />
+            <Label htmlFor="upload-audio">Upload Audio</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="generate-ai" id="generate-ai" />
+            <Label htmlFor="generate-ai">Generate Audio with AI</Label>
+          </div>
+        </RadioGroup>
+        {audioChoice === "upload-audio" ? (
+          // Upload User's Audio
+          <>
+            <FormField
+              control={form.control}
+              name="audioFile"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Upload Audio</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept="audio/*"
+                      {...field}
+                      className="h-auto file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-1 file:text-white-1 hover:file:bg-orange-1/70 border-none bg-black-2 file:cursor-pointer"
+                      onChange={handleAudioUpload}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        ) : audioChoice === "generate-ai" ? (
+          // Generate Podcast using AI
+          <>
+            {/* Select Voice */}
+            <FormField
+              control={form.control}
+              name="voiceType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>AI Prompt to generate podcast</FormLabel>
+                  <FormControl>
+                    <SelectFromEnum
+                      field={field}
+                      passedEnum={voiceTypeEnum}
+                      placeholder={"Select AI Voice"}
+                      value={aiVoice}
+                      setValue={setAiVoice}
+                      hasAudio={true}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Audio Prompt */}
+            <FormField
+              control={form.control}
+              name="audioPrompt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>AI Prompt to generate podcast</FormLabel>
+                  <FormControl>
+                    <GeneratePodcast
+                      field={field}
+                      setAudio={setAudioUrl}
+                      setAudioDuration={setAudioDuration}
+                      setAudioStorageId={setAudioStorageId}
+                      voiceType={aiVoice}
+                      audio={audioUrl}
+                      voicePrompt={audioPrompt}
+                      setVoicePrompt={setAudioPrompt}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        ) : (
+          <>Something went wrong</>
+        )}
         {/* Thumbnail Prompt */}
         <FormField
           control={form.control}
@@ -162,35 +252,25 @@ const CreatePodcastForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Podcast thumbnail</FormLabel>
-              <div className="flex flex-row justify-between items-center bg-black-1 h-auto">
-                <FormControl className="h-full">
-                  <Input
-                    placeholder="AI prompt to generate thumbnail"
-                    {...field}
-                    className="bg-black-1 border-none py-4 mr-1"
-                  />
-                </FormControl>
-                <FormControl>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    className="h-auto file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-1 file:text-black-1 hover:file:bg-orange-1/70 border-none bg-black-2"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        // Handle file upload logic
-                        console.log("Selected file: ", file.name);
-                      }
-                    }}
-                  />
-                </FormControl>
-              </div>
+              <FormControl>
+                <GenerateThumbnail field={field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full bg-orange-1 text-white">
-          Submit & publish podcast
+        <Button
+          type="submit"
+          className="w-full bg-orange-1 text-white hover:bg-black-1 transition-all duration-500 ease-in-out"
+        >
+          {isSubmitting ? (
+            <div className="flex flex-row items-center gap-2">
+              <span>Submitting</span>
+              <Loader2 className="h-4 w-4 animate-spin" />
+            </div>
+          ) : (
+            "Submit & publish podcast"
+          )}
         </Button>
       </form>
     </Form>

@@ -4,7 +4,7 @@ import { sidebarLinks } from "@/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { sidebarLink } from "@/types";
+import { SidebarLink } from "@/types";
 import SiteLogo from "../common/SiteLogo";
 
 const LeftSidebar = ({
@@ -25,7 +25,7 @@ const LeftSidebar = ({
 
   // Update the active state based on the current path
   useEffect(() => {
-    const currentLink: sidebarLink | undefined = sidebarLinks.find(
+    const currentLink: SidebarLink | undefined = sidebarLinks.find(
       (link) => link.route === pathname
     );
     if (currentLink) {

@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <div>
-      <main className="flex flex-row min-h-screen max-md:py-12">
+      <main className="flex flex-row min-h-screen max-md:pt-12">
         <MobileNav />
         <LeftSidebar className={"hidden md:flex"} isOpen={true} />
         {children}
